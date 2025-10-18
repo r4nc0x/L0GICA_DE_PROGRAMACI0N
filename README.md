@@ -1,194 +1,180 @@
-Uso básico
+# **Generador Personalizado de Contraseñas**
+Herramienta Python para generar contraseñas y passphrases seguras con análisis de entropía, verificación contra brechas de datos y exportación flexible.
 
+**⚠️ USO RESPONSABLE:** Solo para pruebas autorizadas, contraseñas propias o entornos de auditoría controlados.
+
+## Características
+- **🔐 Generación de contraseñas aleatorias personalizables**
+
+- **📝 Generación de passphrases (frases de contraseña)**
+
+- **📊 Análisis de entropía y fuerza de contraseñas**
+
+- **🔍 Verificación contra Have I Been Pwned (k-anonymity)**
+
+- **💾 Exportación a JSON y CSV**
+
+- **🐍 Python 3.8+**
+
+## Instalación
+### Requisitos
+- Python 3.8 o superior
+
+- requests (opcional, solo para --check-pwned)
+
+### Instalación de dependencias
 ```bash
-python generador_personalizado_contrasenas.py [OPCIONES]
+#Instalar requests con pip
+pip install requests
 ```
-
-Ayuda rápida
-
+### En sistemas con protección PEP 668 (Kali/Debian):
 ```bash
-python generador_personalizado_contrasenas.py -h
+python3 -m venv venv
+source venv/bin/activate
+venv/bin/pip install requests
 ```
+### O usando el paquete del sistema:
+``bash
+sudo apt install python3-requests
+``
+## Uso básico
+``bash
+python code.py [OPCIONES]
+``
+### Ayuda rápida
+``bash
+python code.py -h
+``
+### Opciones principales
+**Generación básica de contraseñas**
+- **-n, --longitud INT - Longitud de caracteres (por defecto: 12)**
 
-Opciones principales
+- **--no-minus - Desactivar letras minúsculas**
 
-Generación básica de contraseñas
+- **--no-mayus - Desactivar letras mayúsculas**
 
-```
--n, --longitud INT - Longitud de caracteres (por defecto: 12)
+- **--no-digitos - Desactivar números**
 
---no-minus - Desactivar letras minúsculas
+- **--simbolos - Incluir símbolos**
 
---no-mayus - Desactivar letras mayúsculas
+- **-c, --count INT - Cantidad de contraseñas a generar (por defecto: 1)**
 
---no-digitos - Desactivar números
+**Passphrases (frases de palabras)**
+- **--passphrase - Generar passphrase en lugar de password**
 
---simbolos - Incluir símbolos
+- **--words INT - Número de palabras (por defecto: 5)**
 
--c, --count INT - Cantidad de contraseñas a generar (por defecto: 1)
-```
+- **--wordlist PATH - Ruta a archivo con wordlist personalizada**
 
-Passphrases (frases de palabras)
+**Salida e informes**
+- **--entropy - Calcular y mostrar entropía y etiqueta de fuerza**
 
-```
---passphrase - Generar passphrase en lugar de password
+- **--check-pwned - Consultar Have I Been Pwned (requiere requests)**
 
---words INT - Número de palabras (por defecto: 5)
+- **--json - Salida en formato JSON (una línea por ítem)**
 
---wordlist PATH - Ruta a archivo con wordlist personalizada
-```
+- **--csv PATH_OR_DASH - Guardar salida en CSV (usar - para stdout)**
 
-Salida e informes
+### Ejemplos de uso
+**Generar 1 contraseña con análisis completo**
+``bash
+python code.py -n 12 --entropy --check-pwned
+``
+**Generar múltiples contraseñas con símbolos**
+``bash
+python code.py -n 16 -c 3 --simbolos --entropy --json
+``
+**Generar 50 contraseñas y guardar en CSV**
+``bash
+python code.py -n 12 -c 50 --entropy --csv salida.csv
+``
+**Generar passphrases con wordlist personalizada**
+``bash
+python code.py --passphrase --words 4 --wordlist diceware.txt -c 2 --entropy
+``
+### Salida JSON para passphrase
+``bash
+python code.py --passphrase --words 6 --json
+``
+### Formatos de salida
+**Campos devueltos**
+- **value - La contraseña o passphrase generada**
 
-```
---entropy - Calcular y mostrar entropía y etiqueta de fuerza
+- **entropy_bits - Entropía Shannon estimada en bits**
 
---check-pwned - Consultar Have I Been Pwned (requiere requests)
+- **strength_label - Etiqueta de fuerza basada en entropía**
 
---json - Salida en formato JSON (una línea por ítem)
+- **pwned_count - Número de apariciones en brechas (si --check-pwned)**
 
---csv PATH_OR_DASH - Guardar salida en CSV (usar - para stdout)
-```
+### Formato CSV
+**Las columnas corresponden a las claves del diccionario:**
+- **value,entropy_bits,strength_label,pwned_count**
 
-Ejemplos de uso
+### Códigos de salida (exit codes)
+- **0 - Ejecución correcta**
 
-Generar 1 contraseña con análisis completo
+- **1 - Error en argumentos / error controlado**
 
-```bash
-python generador_personalizado_contrasenas.py -n 12 --entropy --check-pwned
-```
+- **>1 - Excepciones no previstas**
 
-Generar múltiples contraseñas con símbolos
+## Seguridad y ética
+**Consideraciones importantes**
+- **✅ USO AUTORIZADO:** Solo para pruebas propias, auditorías autorizadas o contraseñas personales
 
-```bash
-python generador_personalizado_contrasenas.py -n 16 -c 3 --simbolos --entropy --json
-```
+- **✅ k-anonymity:** --check-pwned envía solo 5 caracteres del SHA-1
 
-Generar 50 contraseñas y guardar en CSV
+- **❌ NO USAR para atacar sistemas sin autorización explícita**
 
-```bash
-python generador_personalizado_contrasenas.py -n 12 -c 50 --entropy --csv salida.csv
-```
+- **🔒 Protege los archivos:** No subas CSV con contraseñas a repositorios públicos
 
-Generar passphrases con wordlist personalizada
-
-```bash
-python generador_personalizado_contrasenas.py --passphrase --words 4 --wordlist diceware.txt -c 2 --entropy
-```
-
-Salida JSON para passphrase
-
-```bash
-python generador_personalizado_contrasenas.py --passphrase --words 6 --json
-```
-
-Formatos de salida
-
-Campos devueltos
-
-```
-value - La contraseña o passphrase generada
-
-entropy_bits - Entropía Shannon estimada en bits
-
-strength_label - Etiqueta de fuerza basada en entropía
-
-pwned_count - Número de apariciones en brechas (si --check-pwned)
-```
-
-Formato CSV
-
-Las columnas corresponden a las claves del diccionario:
-
-```csv
-value,entropy_bits,strength_label,pwned_count
-```
-
-Códigos de salida (exit codes)
-
-```
-0 - Ejecución correcta
-
-1 - Error en argumentos / error controlado
-
->1 - Excepciones no previstas
-```
-
-Seguridad y ética
-
-Consideraciones importantes
-
-```
-✅ USO AUTORIZADO: Solo para pruebas propias, auditorías autorizadas o contraseñas personales
-
-✅ k-anonymity: --check-pwned envía solo 5 caracteres del SHA-1
-
-❌ NO USAR para atacar sistemas sin autorización explícita
-
-🔒 Protege los archivos: No subas CSV con contraseñas a repositorios públicos
-```
-
-Configuración de .gitignore
-
-Si generas archivos CSV, añade esto a tu .gitignore:
-
-```text
+### Configuración de .gitignore
+**Si generas archivos CSV, añade esto a tu .gitignore:**
+```BAS
 *.csv
 passwords/
 output/
 ```
+## Resolución de problemas
+### requests no encontrado
+**Síntoma: Error al importar requests**
 
-Resolución de problemas
-
-requests no encontrado
-
-Síntoma: Error al importar requests
-
-Solución:
+**Solución:**
 
 ```bash
 pip install requests
 # o
 sudo apt install python3-requests
+```
+**Verificación:**
 
-Verificación:
-
+```bash
 python -c "import requests; print(requests.__version__)"
-```
-
 --check-pwned devuelve "no disponible"
-
-Causas posibles:
-
 ```
-Falta la librería requests
+**Causas posibles:**
 
-Problemas de red (proxy/firewall)
+- **Falta la librería requests**
 
-Rate limits del servicio
-```
+- **Problemas de red (proxy/firewall)**
 
-Diagnóstico:
+- **Rate limits del servicio**
+
+**Diagnóstico:**
 
 ```bash
 curl -i "https://api.pwnedpasswords.com/range/ABCDE"
-```
-
 CSV vacío / sin salida
-
-Solución:
-
 ```
-Verificar que se usan --csv y/o --json correctamente
+**Solución:**
 
-Por defecto la herramienta imprime salida legible por pantalla
+- **Verificar que se usan --csv y/o --json correctamente**
 
-Para CSV en stdout: --csv -
-```
+- **Por defecto la herramienta imprime salida legible por pantalla**
 
-Estructura del proyecto
+- **Para CSV en stdout: --csv -**
 
-```text
+## Estructura del proyecto
+```bash
 generador_personalizado_contrasenas.py
 ├── Generación de contraseñas
 ├── Generación de passphrases  
@@ -196,6 +182,4 @@ generador_personalizado_contrasenas.py
 ├── Verificación HIBP (opcional)
 └── Exportación JSON/CSV
 ```
-
-Nota: Esta herramienta se proporciona con fines educativos y de seguridad. El uso indebido es responsabilidad del usuario.
-
+**Nota:** Esta herramienta se proporciona con fines educativos y de seguridad. El uso indebido es responsabilidad del usuario.
