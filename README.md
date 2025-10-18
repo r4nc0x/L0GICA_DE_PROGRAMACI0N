@@ -47,75 +47,85 @@ python code.py -h
 ``
 ### Opciones principales
 **Generación básica de contraseñas**
-- **-n, --longitud INT - Longitud de caracteres (por defecto: 12)**
+- -n, --longitud INT - Longitud de caracteres (por defecto: 12)
 
-- **--no-minus - Desactivar letras minúsculas**
+- --no-minus - Desactivar letras minúsculas
 
-- **--no-mayus - Desactivar letras mayúsculas**
+- --no-mayus - Desactivar letras mayúsculas
 
-- **--no-digitos - Desactivar números**
+- --no-digitos - Desactivar números
 
-- **--simbolos - Incluir símbolos**
+- --simbolos - Incluir símbolos
 
-- **-c, --count INT - Cantidad de contraseñas a generar (por defecto: 1)**
+- -c, --count INT - Cantidad de contraseñas a generar (por defecto: 1)
 
 **Passphrases (frases de palabras)**
-- **--passphrase - Generar passphrase en lugar de password**
+- --passphrase - Generar passphrase en lugar de password
 
-- **--words INT - Número de palabras (por defecto: 5)**
+- --words INT - Número de palabras (por defecto: 5)
 
-- **--wordlist PATH - Ruta a archivo con wordlist personalizada**
+- --wordlist PATH - Ruta a archivo con wordlist personalizada
 
 **Salida e informes**
-- **--entropy - Calcular y mostrar entropía y etiqueta de fuerza**
+- --entropy - Calcular y mostrar entropía y etiqueta de fuerza
 
-- **--check-pwned - Consultar Have I Been Pwned (requiere requests)**
+- --check-pwned - Consultar Have I Been Pwned (requiere requests)
 
-- **--json - Salida en formato JSON (una línea por ítem)**
+- --json - Salida en formato JSON (una línea por ítem)
 
-- **--csv PATH_OR_DASH - Guardar salida en CSV (usar - para stdout)**
+- --csv PATH_OR_DASH - Guardar salida en CSV (usar - para stdout)
 
 ### Ejemplos de uso
 **Generar 1 contraseña con análisis completo**
+
 ``bash
 python code.py -n 12 --entropy --check-pwned
 ``
+
 **Generar múltiples contraseñas con símbolos**
+
 ``bash
 python code.py -n 16 -c 3 --simbolos --entropy --json
 ``
+
 **Generar 50 contraseñas y guardar en CSV**
+
 ``bash
 python code.py -n 12 -c 50 --entropy --csv salida.csv
 ``
+
 **Generar passphrases con wordlist personalizada**
+
 ``bash
 python code.py --passphrase --words 4 --wordlist diceware.txt -c 2 --entropy
 ``
+
 ### Salida JSON para passphrase
+
 ``bash
 python code.py --passphrase --words 6 --json
 ``
+
 ### Formatos de salida
 **Campos devueltos**
-- **value - La contraseña o passphrase generada**
+- value - La contraseña o passphrase generada
 
-- **entropy_bits - Entropía Shannon estimada en bits**
+- entropy_bits - Entropía Shannon estimada en bits
 
-- **strength_label - Etiqueta de fuerza basada en entropía**
+- strength_label - Etiqueta de fuerza basada en entropía
 
-- **pwned_count - Número de apariciones en brechas (si --check-pwned)**
+- pwned_count - Número de apariciones en brechas (si --check-pwned)
 
 ### Formato CSV
 **Las columnas corresponden a las claves del diccionario:**
-- **value,entropy_bits,strength_label,pwned_count**
+- value,entropy_bits,strength_label,pwned_count
 
 ### Códigos de salida (exit codes)
-- **0 - Ejecución correcta**
+- 0 - Ejecución correcta
 
-- **1 - Error en argumentos / error controlado**
+- 1 - Error en argumentos / error controlado
 
-- **>1 - Excepciones no previstas**
+- ">1 - Excepciones no previstas"
 
 ## Seguridad y ética
 **Consideraciones importantes**
@@ -153,11 +163,11 @@ python -c "import requests; print(requests.__version__)"
 ```
 **Causas posibles:**
 
-- **Falta la librería requests**
+- Falta la librería requests
 
-- **Problemas de red (proxy/firewall)**
+- Problemas de red (proxy/firewall)
 
-- **Rate limits del servicio**
+- Rate limits del servicio
 
 **Diagnóstico:**
 
